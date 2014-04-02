@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>4AE21C2A-7EAF-4A8F-9043-CF0E1B9D203E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Coach Marks</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>80C92BF0-DB20-4733-ACAD-80FBCBBE85CA</key>
+		<string>ssh://github.com/ddoria921/DDCoachMarks.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Coach Marks.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>80C92BF0-DB20-4733-ACAD-80FBCBBE85CA</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/ddoria921/DDCoachMarks.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>80C92BF0-DB20-4733-ACAD-80FBCBBE85CA</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>80C92BF0-DB20-4733-ACAD-80FBCBBE85CA</string>
+			<key>IDESourceControlWCCName</key>
+			<string>DDCoachMarks</string>
+		</dict>
+	</array>
+</dict>
+</plist>
