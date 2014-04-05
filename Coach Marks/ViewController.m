@@ -24,7 +24,7 @@
 {
     [super viewDidAppear:animated];
     
-    NSArray *coachMarksDetails = @[
+    NSArray *coachMarks = @[
                             @{
                                 @"rect": [NSValue valueWithCGRect:CGRectMake(6, 24, 40, 40)],
                                 @"caption": @"Synchronize your mail",
@@ -43,16 +43,10 @@
                                 },
                             ];
     
-    DDCoachMarksView *coachMarks = [[DDCoachMarksView alloc] initWithFrame:self.view.bounds coachMarks:coachMarksDetails];
+    DDCoachMarksView *coachMarksView = [[DDCoachMarksView alloc] initWithFrame:self.view.bounds coachMarks:coachMarks];
     
-    [self.view addSubview:coachMarks];
-    [coachMarks start];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [self.view addSubview:coachMarksView];
+    [coachMarksView start];
 }
 
 @end

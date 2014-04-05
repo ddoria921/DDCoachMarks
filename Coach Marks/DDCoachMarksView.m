@@ -178,7 +178,6 @@ static const CGFloat    kLblSpacing = 35.0f;
 
     // Coach mark definition
     NSDictionary *markDef = [self.coachMarks objectAtIndex:index];
-    NSString *markCaption = [markDef objectForKey:@"caption"];
     CGRect markRect = [[markDef objectForKey:@"rect"] CGRectValue];
     NSString *shape = [markDef objectForKey:@"shape"];
     
@@ -189,26 +188,6 @@ static const CGFloat    kLblSpacing = 35.0f;
 
     if (self.useBubbles) {
         [self animateNextBubble];
-    }
-
-    else {
-        // Calculate the caption position and size
-        self.lblCaption.alpha = 0.0f;
-        self.lblCaption.frame = (CGRect){{0.0f, 0.0f}, {self.maxLblWidth, 0.0f}};
-        self.lblCaption.text = markCaption;
-        [self.lblCaption sizeToFit];
-        CGFloat y = markRect.origin.y + markRect.size.height + self.lblSpacing;
-        CGFloat bottomY = y + self.lblCaption.frame.size.height + self.lblSpacing;
-        if (bottomY > self.bounds.size.height) {
-            y = markRect.origin.y - self.lblSpacing - self.lblCaption.frame.size.height;
-        }
-        CGFloat x = floorf((self.bounds.size.width - self.lblCaption.frame.size.width) / 2.0f);
-        
-        // Animate the caption label
-        self.lblCaption.frame = (CGRect){{x, y}, self.lblCaption.frame.size};
-        [UIView animateWithDuration:0.3f animations:^{
-            self.lblCaption.alpha = 1.0f;
-        }];
     }
 
     // If first mark, set the cutout to the center of first mark

@@ -15,7 +15,6 @@
 
 @property (nonatomic, weak) id<DDCoachMarksViewDelegate> delegate;
 @property (nonatomic, retain)   NSArray *coachMarks;
-@property (nonatomic, weak)     UILabel *lblCaption;
 @property (nonatomic, retain)   UIColor *maskColor;
 @property (nonatomic)           CGFloat animationDuration;
 @property (nonatomic)           CGFloat cutoutRadius;
