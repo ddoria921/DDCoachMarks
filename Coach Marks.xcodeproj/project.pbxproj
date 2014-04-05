@@ -21,6 +21,9 @@
 		93299DC418EBEA2700D8E660 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93299DA618EBEA2700D8E660 /* UIKit.framework */; };
 		93299DCC18EBEA2700D8E660 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 93299DCA18EBEA2700D8E660 /* InfoPlist.strings */; };
 		93299DCE18EBEA2700D8E660 /* Coach_MarksTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 93299DCD18EBEA2700D8E660 /* Coach_MarksTests.m */; };
+		935EE4C418F07520001F039E /* DDBubble.m in Sources */ = {isa = PBXBuildFile; fileRef = 935EE4BF18F07520001F039E /* DDBubble.m */; };
+		935EE4C518F07520001F039E /* DDCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 935EE4C118F07520001F039E /* DDCircleView.m */; };
+		935EE4C618F07520001F039E /* DDCoachMarksView.m in Sources */ = {isa = PBXBuildFile; fileRef = 935EE4C318F07520001F039E /* DDCoachMarksView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +56,12 @@
 		93299DC918EBEA2700D8E660 /* Coach MarksTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Coach MarksTests-Info.plist"; sourceTree = "<group>"; };
 		93299DCB18EBEA2700D8E660 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		93299DCD18EBEA2700D8E660 /* Coach_MarksTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Coach_MarksTests.m; sourceTree = "<group>"; };
+		935EE4BE18F07520001F039E /* DDBubble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDBubble.h; sourceTree = "<group>"; };
+		935EE4BF18F07520001F039E /* DDBubble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDBubble.m; sourceTree = "<group>"; };
+		935EE4C018F07520001F039E /* DDCircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDCircleView.h; sourceTree = "<group>"; };
+		935EE4C118F07520001F039E /* DDCircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDCircleView.m; sourceTree = "<group>"; };
+		935EE4C218F07520001F039E /* DDCoachMarksView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDCoachMarksView.h; sourceTree = "<group>"; };
+		935EE4C318F07520001F039E /* DDCoachMarksView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDCoachMarksView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +126,12 @@
 				93299DB418EBEA2700D8E660 /* Main.storyboard */,
 				93299DB718EBEA2700D8E660 /* ViewController.h */,
 				93299DB818EBEA2700D8E660 /* ViewController.m */,
+				935EE4BE18F07520001F039E /* DDBubble.h */,
+				935EE4BF18F07520001F039E /* DDBubble.m */,
+				935EE4C018F07520001F039E /* DDCircleView.h */,
+				935EE4C118F07520001F039E /* DDCircleView.m */,
+				935EE4C218F07520001F039E /* DDCoachMarksView.h */,
+				935EE4C318F07520001F039E /* DDCoachMarksView.m */,
 				93299DBA18EBEA2700D8E660 /* Images.xcassets */,
 				93299DA918EBEA2700D8E660 /* Supporting Files */,
 			);
@@ -249,8 +264,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				935EE4C618F07520001F039E /* DDCoachMarksView.m in Sources */,
 				93299DB918EBEA2700D8E660 /* ViewController.m in Sources */,
+				935EE4C418F07520001F039E /* DDBubble.m in Sources */,
 				93299DB318EBEA2700D8E660 /* AppDelegate.m in Sources */,
+				935EE4C518F07520001F039E /* DDCircleView.m in Sources */,
 				93299DAF18EBEA2700D8E660 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -456,6 +474,7 @@
 				93299DD318EBEA2700D8E660 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		93299DD418EBEA2700D8E660 /* Build configuration list for PBXNativeTarget "Coach MarksTests" */ = {
 			isa = XCConfigurationList;
@@ -464,6 +483,7 @@
 				93299DD618EBEA2700D8E660 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

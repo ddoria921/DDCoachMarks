@@ -78,13 +78,6 @@ static const CGFloat    kLblSpacing = 35.0f;
     UISwipeGestureRecognizer *swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:nil];
     [self addGestureRecognizer:swipeGestureRecognizer];
     [self addGestureRecognizer:tapGestureRecognizer];
-
-    // show skip button
-    UIButton *skipButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    skipButton.frame = CGRectMake(150, 500, 100, 50);
-    [skipButton setTitle:@"Skip" forState:UIControlStateNormal];
-    [skipButton addTarget:self action:@selector(skipButtonTapped) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:skipButton];
     
     // Hide until unvoked
     self.hidden = YES;
@@ -155,16 +148,6 @@ static const CGFloat    kLblSpacing = 35.0f;
     
     // Go to the next coach mark
     [self goToCoachMarkIndexed:(markIndex+1)];
-}
-
-#pragma mark - Tapped Button
-
-- (void)skipButtonTapped
-{
-    // set all coach mark user defualts to seen
-    
-    // go to end of current coach marks
-    [self goToCoachMarkIndexed:self.coachMarks.count];
 }
 
 #pragma mark - Navigation

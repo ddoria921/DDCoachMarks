@@ -59,19 +59,17 @@
                                                        animations:^{
                                                            // Slide Right
                                                            self.transform = CGAffineTransformMakeTranslation(260, 0);
-                                                           // Fade Out
-                                                           self.alpha = 0.0f;
-
                                                        }
                                                        completion:^(BOOL finished) {
                                                            // End
                                                            [UIView animateWithDuration:0.5
                                                                             animations:^{
                                                                                 // Fade Out
-                                                                                //self.alpha = 0.0f;
+                                                                                self.alpha = 0.0f;
                                                                             }
                                                                             completion:^(BOOL finished) {
                                                                                 // End
+                                                                                // Repeat
                                                                                 [self performSelector:@selector(animateSwipeRight)];
                                                                             }];
                                                        }];

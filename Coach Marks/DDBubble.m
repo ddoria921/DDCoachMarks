@@ -222,7 +222,7 @@
                           delay:0.3
                         options:(UIViewAnimationOptionRepeat | UIViewAnimationOptionAutoreverse)
                      animations:^ {
-                         self.transform = CGAffineTransformMakeTranslation(0, -4);
+                         self.transform = CGAffineTransformMakeTranslation(0, -5);
                      }
                      completion:^(BOOL finished) {
                      }];
