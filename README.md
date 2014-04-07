@@ -71,7 +71,7 @@ You also might need to change the coordinates of the CGRect values you passed in
 CGRect navFrame = [self.view convertRect:button.frame toView:navController.view];
 ```
 
-You can configure any coach mark properties before call the `start` method. For example:
+You can configure any coach mark properties before calling the `start` method. For example:
 ```objective-c
 coachMarksView.animationDuration = 0.5f;
 coachMarksView.maskColor = [UIColor blueColor];
