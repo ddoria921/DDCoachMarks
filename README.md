@@ -71,7 +71,7 @@ You also might need to change the coordinates of the CGRect values you passed in
 CGRect navFrame = [self.view convertRect:button.frame toView:navController.view];
 ```
 
-You can configure any coach mark properties before call the `start` method. For example:
+You can configure any coach mark properties before calling the `start` method. For example:
 ```objective-c
 coachMarksView.animationDuration = 0.5f;
 coachMarksView.maskColor = [UIColor blueColor];
@@ -83,13 +83,13 @@ coachMarksView.useBubbles = NO;
 When creating your array of dictionary definitions for each coach mark only the `@"rect"` value is required. 
 Other optional values are:
 * `@"caption"` 
-** Text that goes in the bubbles
+Text that goes in the bubbles
 * `@"shape"`
-** Can be set to circle or square. If nothing is defined, the default is a rounded rect.
+ Can be set to circle or square. If nothing is defined, the default is a rounded rect.
 * `@"POI"`
-** Stands for 'point of interest'. You can define a whole region using the `@"rect"` value, but defining a different CGRect value here makes the bubble caption position itself under the POI rect.
+ Stands for 'point of interest'. You can define a whole region using the `@"rect"` value, but defining a different CGRect value here makes the bubble caption position itself under the POI rect.
 * `@"swipe"`
-** Use "YES" here if you want to show a row swipe gesture on a table view cell. Disabled by default.
+ Use "YES" here if you want to show a row swipe gesture on a table view cell. Disabled by default.
 
 ## DDCoachMarksViewDelegate
 
