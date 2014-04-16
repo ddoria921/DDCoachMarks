@@ -4,11 +4,12 @@ DDCoachMarks
 Quick and easy coach marks to use in any iOS app.
 
 ![](https://raw.githubusercontent.com/ddoria921/DDCoachMarks/master/Preview%20Images/preview1.png?token=3970871__eyJzY29wZSI6IlJhd0Jsb2I6ZGRvcmlhOTIxL0REQ29hY2hNYXJrcy9tYXN0ZXIvUHJldmlldyBJbWFnZXMvcHJldmlldzEucG5nIiwiZXhwaXJlcyI6MTM5NzMzMjE1NX0%3D--c7460ce128607c4887106c88f0572d75d593dae1)
-
 ![](https://raw.githubusercontent.com/ddoria921/DDCoachMarks/master/Preview%20Images/preview2.png?token=3970871__eyJzY29wZSI6IlJhd0Jsb2I6ZGRvcmlhOTIxL0REQ29hY2hNYXJrcy9tYXN0ZXIvUHJldmlldyBJbWFnZXMvcHJldmlldzIucG5nIiwiZXhwaXJlcyI6MTM5NzMzMjE3OH0%3D--436361979e62e3639c427b94c7d6804eab77d38b)
-
 ![](https://raw.githubusercontent.com/ddoria921/DDCoachMarks/master/Preview%20Images/preview3.png?token=3970871__eyJzY29wZSI6IlJhd0Jsb2I6ZGRvcmlhOTIxL0REQ29hY2hNYXJrcy9tYXN0ZXIvUHJldmlldyBJbWFnZXMvcHJldmlldzMucG5nIiwiZXhwaXJlcyI6MTM5NzMzMjE5NH0%3D--49ede964615a2980e484ad0ad53a295d5725c72a)
 
+## If you use my code, I'd like to know about it!
+Seriously though, it would be cool for me to find out if (and how) people are making use of my code. A simple email would be greatly appreciated.
+ddoria921@gmail.com
 
 ## Requirements
 DDCoachMarks works on any iOS version and is built with ARC. It depends on the following Apple frameworks:
@@ -25,7 +26,7 @@ DDCoachMarks works on any iOS version and is built with ARC. It depends on the f
 ## Example
 Create a new DDCoachMarksView instance and pass in an array of coach mark definitions
 
-```objective-c
+``` objective-c
 - (void)viewDidAppear:(BOOL)animated 
 {
 	[super viewDidLoad];
@@ -56,7 +57,7 @@ Create a new DDCoachMarksView instance and pass in an array of coach mark defini
 	[self.view addSubview:coachMarksView];
 	[coachMarksView start];
 }
-```
+``` 
 
 If you want to add the coach marks to a view controller that is part of a navigation controller, you need to add it to the navigation controller's view like this...
 ```objective-c
