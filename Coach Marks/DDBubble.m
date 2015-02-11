@@ -59,8 +59,8 @@
     CGSize offsets = [self offsets];
     float actualXPosition = offsets.width+PADDING*1.5;
     float actualYPosition = offsets.height+PADDING*1.25;
-    float actualWidth = self.frame.size.width - offsets.width - PADDING*3;
-    float actualHeight = self.frame.size.height-PADDING*2.5;
+    float actualWidth = self.frame.size.width-offsets.width-PADDING*3;
+    float actualHeight = self.frame.size.height-offsets.height-PADDING*2.5;
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(actualXPosition, actualYPosition, actualWidth, actualHeight)];
     [titleLabel setTextColor:TEXT_COLOR];
