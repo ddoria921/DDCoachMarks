@@ -49,27 +49,36 @@
         [self setBackgroundColor:[UIColor clearColor]];
     }
     
+    UIFont* font = [self font];
+    
     // position bubble
-    [self setFrame:[self calculateFrame]];
+    [self setFrame:[self calculateFrameWithFont:font]];
     [self fixFrameIfOutOfBounds];
     
     // calculate and position text
-    float actualXPosition = [self offsets].width+PADDING*1.5;
-    float actualYPosition = [self offsets].height+PADDING*1.25;
-    float actualWidth = self.frame.size.width;
-    float actualHeight = TITLE_FONT_SIZE+3;
+    CGSize offsets = [self offsets];
+    float actualXPosition = offsets.width+PADDING*1.5;
+    float actualYPosition = offsets.height+PADDING*1.25;
+    float actualWidth = self.frame.size.width - offsets.width - PADDING*3;
+    float actualHeight = self.frame.size.height-PADDING*2.5;
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(actualXPosition, actualYPosition, actualWidth, actualHeight)];
     [titleLabel setTextColor:TEXT_COLOR];
     [titleLabel setAlpha:0.9];
-    [titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue" size:TITLE_FONT_SIZE]];
+    [titleLabel setFont:font];
     [titleLabel setText:title];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
+    [titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
+    [titleLabel setNumberOfLines:0];
     [self addSubview:titleLabel];
     
     
     [self setNeedsDisplay];
     return self;
+}
+
+- (UIFont*) font {
+    return [UIFont fontWithName:@"HelveticaNeue" size:TITLE_FONT_SIZE];
 }
 
 
@@ -84,7 +93,8 @@
      *  position and size. If it is, return YES.
      */
     
-    const float xBounds = 320;
+    CGRect window = [[[UIApplication sharedApplication] keyWindow] frame];
+    const float xBounds = window.size.width; // 320;
 //    const float yBounds = 568;
     
     float x = self.frame.origin.x;
@@ -97,46 +107,48 @@
     // check for right most bound
     if (x + width > xBounds) {
         _arrowOffset = (x + width) - xBounds;
-        x = x - _arrowOffset;
+        x = xBounds - width;
     }
     // check for left most bound
-    else if (x < 0) {
+    if (x < 0) {
         _arrowOffset = x - padding;
-        x = x - _arrowOffset + padding;
+        x = 0;
     }
     
     [self setFrame:CGRectMake(x, y, width, height)];
 }
 
--(CGRect)calculateFrame
+-(CGRect)calculateFrameWithFont:(UIFont*)font
 {
     //Calculation of the bubble position
     float x = self.attachedFrame.origin.x;
     float y = self.attachedFrame.origin.y;
     
+    CGSize size = [self sizeWithFont:font];
     
     if(self.arrowPosition==CRArrowPositionLeft||self.arrowPosition==CRArrowPositionRight)
     {
-        y+=self.attachedFrame.size.height/2-[self size].height/2;
-        x+=(self.arrowPosition==CRArrowPositionLeft)? ARROW_SPACE+self.attachedFrame.size.width : -(ARROW_SPACE*2+[self size].width);
+        y+=self.attachedFrame.size.height/2-size.height/2;
+        x+=(self.arrowPosition==CRArrowPositionLeft)? ARROW_SPACE+self.attachedFrame.size.width : -(ARROW_SPACE*2+size.width);
         
     }else if(self.arrowPosition==CRArrowPositionTop||self.arrowPosition==CRArrowPositionBottom)
     {
-        x+=self.attachedFrame.size.width/2-[self size].width/2;
-        y+=(self.arrowPosition==CRArrowPositionTop)? ARROW_SPACE+self.attachedFrame.size.height : -(ARROW_SPACE*2+[self size].height);
+        x+=self.attachedFrame.size.width/2-size.width/2;
+        y+=(self.arrowPosition==CRArrowPositionTop)? ARROW_SPACE+self.attachedFrame.size.height : -(ARROW_SPACE*2+size.height);
     }
     
-    return CGRectMake(x, y, [self size].width+ARROW_SIZE, [self size].height+ARROW_SIZE);
+    CGSize offsets = [self offsets];
+    return CGRectMake(x, y, size.width+offsets.width, size.height+offsets.height);
 }
 
--(CGSize)size
+-(CGSize)sizeWithFont:(UIFont*)font
 {
     // Calcultation of the bubble size
     // size of bubble title determined by the strings attributes
-    CGSize result = [_title sizeWithAttributes:@{
-                                                    NSFontAttributeName: [UIFont fontWithName:@"HelveticaNeue" size:TITLE_FONT_SIZE]
-                                                 
-                                                 }];
+    CGSize offset = [self offsets];
+    CGRect window = [[[UIApplication sharedApplication] keyWindow] frame];
+    
+    CGSize result = [_title sizeWithFont:font constrainedToSize:CGSizeMake(window.size.width - offset.width - (PADDING*4), FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
     
     return CGSizeMake(result.width + (PADDING*3), result.height + (PADDING*2.5));
 }
@@ -156,7 +168,9 @@
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
     
-    CGPathRef clippath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake([self offsets].width,[self offsets].height, [self size].width, [self size].height) cornerRadius:RADIUS].CGPath;
+    CGSize size = [self sizeWithFont:[self font]];
+    
+    CGPathRef clippath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake([self offsets].width,[self offsets].height, size.width, size.height) cornerRadius:RADIUS].CGPath;
     CGContextAddPath(ctx, clippath);
     
     CGContextSetFillColorWithColor(ctx, self.color.CGColor);
@@ -188,24 +202,24 @@
     
     if(self.arrowPosition==CRArrowPositionTop)
     {
-        CGAffineTransform trans = CGAffineTransformMakeTranslation([self size].width/2-(ARROW_SIZE)/2+_arrowOffset, 0);
+        CGAffineTransform trans = CGAffineTransformMakeTranslation(size.width/2-(ARROW_SIZE)/2+_arrowOffset, 0);
         [path applyTransform:trans];
     }else if(self.arrowPosition==CRArrowPositionBottom)
     {
         CGAffineTransform rot = CGAffineTransformMakeRotation(M_PI);
-        CGAffineTransform trans = CGAffineTransformMakeTranslation([self size].width/2+(ARROW_SIZE)/2+_arrowOffset, [self size].height+ARROW_SIZE);
+        CGAffineTransform trans = CGAffineTransformMakeTranslation(size.width/2+(ARROW_SIZE)/2+_arrowOffset, size.height+ARROW_SIZE);
         [path applyTransform:rot];
         [path applyTransform:trans];
     }else if(self.arrowPosition==CRArrowPositionLeft)
     {
         CGAffineTransform rot = CGAffineTransformMakeRotation(M_PI*1.5);
-        CGAffineTransform trans = CGAffineTransformMakeTranslation(0, ([self size].height+ARROW_SIZE)/2);
+        CGAffineTransform trans = CGAffineTransformMakeTranslation(0, (size.height+ARROW_SIZE)/2);
         [path applyTransform:rot];
         [path applyTransform:trans];
     }else if(self.arrowPosition==CRArrowPositionRight)
     {
         CGAffineTransform rot = CGAffineTransformMakeRotation(M_PI*0.5);
-        CGAffineTransform trans = CGAffineTransformMakeTranslation([self size].width+ARROW_SIZE, ([self size].height-ARROW_SIZE)/2);
+        CGAffineTransform trans = CGAffineTransformMakeTranslation(size.width+ARROW_SIZE, (size.height-ARROW_SIZE)/2);
         [path applyTransform:rot];
         [path applyTransform:trans];
     }
