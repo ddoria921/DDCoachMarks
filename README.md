@@ -91,6 +91,8 @@ Text that goes in the bubbles
  Stands for 'point of interest'. You can define a whole region using the `@"rect"` value, but defining a different CGRect value here makes the bubble caption position itself under the POI rect.
 * `@"swipe"`
  Use "YES" here if you want to show a row swipe gesture on a table view cell. Disabled by default.
+* `@"direction"`
+ Direction that swipe gestures should animate in. The default is `@"lefttoright"` but you can also specify `@"righttoleft"`.
 
 ## DDCoachMarksViewDelegate
 

@@ -212,6 +212,12 @@ static const CGFloat    kLblSpacing = 35.0f;
     CGRect frame = [[coachMarkInfo objectForKey:@"rect"] CGRectValue];
     BOOL shouldAnimateSwipe = [[coachMarkInfo objectForKey:@"swipe"] boolValue];
     
+    NSString* swipeDirection = [coachMarkInfo objectForKey:@"direction"];
+    enum EnumCircleSwipeDirection direction = kCircleSwipeLeftToRight;
+    if ((swipeDirection != nil) && ([swipeDirection isEqualToString:@"righttoleft"])) {
+        direction = kCircleSwipeRightToLeft;
+    }
+    
     // if next animation doesn't need swipe
     // remove current swiping circle if one exists
     if (self.animatingCircle) {
@@ -229,6 +235,8 @@ static const CGFloat    kLblSpacing = 35.0f;
         if (![self.subviews containsObject:self.animatingCircle]) {
             [self addSubview:self.animatingCircle];
         }
+        
+        self.animatingCircle.swipeDirection = direction;
         
         [self.animatingCircle swipeInFrame:frame];
     }
