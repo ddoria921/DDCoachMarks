@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.author       = { "Darin Doria" => "ddoria921@gmail.com" }
   s.source       = { :git => "https://github.com/ddoria921/DDCoachMarks.git", :branch => "master" }
   s.platform     = :ios, '6.0'
-  s.source_files = 'Coach Marks/*.{h,m}'
+  s.source_files = 'Coach Marks/DD*.{h,m}'
   s.frameworks   = 'Foundation', 'UIKit', 'QuartzCore'
   s.requires_arc = true
 end
