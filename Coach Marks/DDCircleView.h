@@ -8,9 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+enum EnumCircleSwipeDirection {
+    kCircleSwipeLeftToRight,
+    kCircleSwipeRightToLeft
+};
+
 @interface DDCircleView : UIView
 
 @property BOOL animationShouldStop;
+@property enum EnumCircleSwipeDirection swipeDirection;
 
 - (void)swipeInFrame:(CGRect)frame;
 

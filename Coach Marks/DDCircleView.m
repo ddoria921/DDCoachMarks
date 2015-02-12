@@ -39,32 +39,50 @@
 - (void)swipeInFrame:(CGRect)frame
 {
     [self centerYPositioninView:self inFrame:frame];
-    [self animateSwipeRight];
+    [self animateSwipe];
 }
 
-- (void)animateSwipeRight
+- (void)animateSwipe
 {
     if (!_animationShouldStop) {
-        self.transform = CGAffineTransformMakeScale(2, 2);
+        CGAffineTransform scale = CGAffineTransformMakeScale(2, 2);
+        CGAffineTransform translateRight = CGAffineTransformMakeTranslation(260, 0);
+        if (self.swipeDirection == kCircleSwipeLeftToRight) {
+            self.transform = scale;
+        } else {
+            // Start on the right hand side as well as scaling
+            self.transform = CGAffineTransformConcat(translateRight, scale);
+        }
         self.alpha = 0.0f;
         [UIView animateKeyframesWithDuration:0.6 delay:0.3 options:0
                                   animations:^{
                                       // Fade In
-                                      self.transform = CGAffineTransformMakeScale(1, 1);
+                                      if (self.swipeDirection == kCircleSwipeLeftToRight) {
+                                          // Scale down to normal
+                                          self.transform = CGAffineTransformMakeScale(1, 1);
+                                      } else {
+                                          // Start on the right hand side
+                                          self.transform = translateRight;
+                                      }
                                       self.alpha = 1.0f;
                                   }
                                   completion:^(BOOL finished){
                                       // End
                                       [UIView animateWithDuration:1.0
                                                        animations:^{
-                                                           // Slide Right
-                                                           self.transform = CGAffineTransformMakeTranslation(260, 0);
+                                                           if (self.swipeDirection == kCircleSwipeLeftToRight) {
+                                                               // Slide Right
+                                                               self.transform = translateRight;
+                                                           } else {
+                                                               // Slide left
+                                                               self.transform = CGAffineTransformIdentity;
+                                                           }
                                                            // Fade Out
                                                            self.alpha = 0.0f;
                                                        }
                                                        completion:^(BOOL finished) {
                                                            // End
-                                                           [self performSelector:@selector(animateSwipeRight)];
+                                                           [self performSelector:@selector(animateSwipe)];
                                                        }];
                                   }];
         
