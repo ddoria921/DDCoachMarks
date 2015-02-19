@@ -95,7 +95,7 @@
     
     CGRect window = [[[UIApplication sharedApplication] keyWindow] frame];
     const float xBounds = window.size.width; // 320;
-//    const float yBounds = 568;
+    const float yBounds = window.size.height;
     
     float x = self.frame.origin.x;
     float y = self.frame.origin.y;
@@ -113,6 +113,24 @@
     if (x < 0) {
         _arrowOffset = x - padding;
         x = 0;
+    }
+    
+    // If the content pushes us off the vertical bounds we might have to be more drastic
+    // and flip the arrow direction
+    if ((self.arrowPosition == CRArrowPositionTop) && (y + height > yBounds)) {
+        self.arrowPosition = CRArrowPositionBottom;
+        
+        // Restart the entire process
+        CGRect flippedFrame = [self calculateFrameWithFont:[self font]];
+        y = flippedFrame.origin.y;
+        height = flippedFrame.size.height;
+    } else if ((self.arrowPosition == CRArrowPositionBottom) && (y < 0)) {
+        self.arrowPosition = CRArrowPositionTop;
+        
+        // Restart the entire process
+        CGRect flippedFrame = [self calculateFrameWithFont:[self font]];
+        y = flippedFrame.origin.y;
+        height = flippedFrame.size.height;
     }
     
     [self setFrame:CGRectMake(x, y, width, height)];
@@ -137,8 +155,7 @@
         y+=(self.arrowPosition==CRArrowPositionTop)? ARROW_SPACE+self.attachedFrame.size.height : -(ARROW_SPACE*2+size.height);
     }
     
-    CGSize offsets = [self offsets];
-    return CGRectMake(x, y, size.width+offsets.width, size.height+offsets.height);
+    return CGRectMake(x, y, size.width+ARROW_SIZE, size.height+ARROW_SIZE);
 }
 
 -(CGSize)sizeWithFont:(UIFont*)font
