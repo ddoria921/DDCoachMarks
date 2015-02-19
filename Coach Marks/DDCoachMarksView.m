@@ -230,7 +230,7 @@ static const CGFloat    kLblSpacing = 35.0f;
 
     // create an animating circle and animate it
     if (shouldAnimateSwipe) {
-        self.animatingCircle = [[DDCircleView alloc] initWithFrame:CGRectZero];
+        self.animatingCircle = [[DDCircleView alloc] initWithFrame:self.frame];
         
         if (![self.subviews containsObject:self.animatingCircle]) {
             [self addSubview:self.animatingCircle];

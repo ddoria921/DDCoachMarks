@@ -38,7 +38,7 @@
 
 - (void)swipeInFrame:(CGRect)frame
 {
-    [self centerYPositioninView:self inFrame:frame];
+    [self centerInView:self inFrame:frame];
     [self animateSwipe];
 }
 
@@ -101,7 +101,7 @@
 - (void)centerXPositioninView:(UIView *)view inFrame:(CGRect)frame
 {
     CGFloat centerX = frame.origin.x + CGRectGetWidth(frame)/2;
-    CGFloat offsetX = CGRectGetWidth(view.frame)/2;
+    CGFloat offsetX = 260/2;
     
     CGFloat newX = centerX - offsetX;
     view.frame = CGRectMake(newX, view.frame.origin.y, 40, 40);
