@@ -111,7 +111,9 @@
     }
     // check for left most bound
     if (x < 0) {
-        _arrowOffset = x - padding;
+        if (_arrowOffset == 0) {
+            _arrowOffset = x - padding;
+        }
         x = 0;
     }
     
