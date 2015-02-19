@@ -59,10 +59,11 @@
     CGSize offsets = [self offsets];
     float actualXPosition = offsets.width+PADDING*1.5;
     float actualYPosition = offsets.height+PADDING*1.25;
-    float actualWidth = self.frame.size.width-offsets.width-PADDING*3;
-    float actualHeight = self.frame.size.height - ((self.arrowPosition==CRArrowPositionTop || self.arrowPosition == CRArrowPositionBottom) ? ARROW_SIZE : 0) - PADDING*2.5;
+    float actualWidth = self.frame.size.width-actualXPosition - PADDING*1.5;
+    float actualHeight = self.frame.size.height - actualYPosition - PADDING*1.2;
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(actualXPosition, actualYPosition, actualWidth, actualHeight)];
+    [titleLabel setFont:font];
     [titleLabel setTextColor:TEXT_COLOR];
     [titleLabel setAlpha:0.9];
     [titleLabel setFont:font];
@@ -146,28 +147,38 @@
     
     CGSize size = [self sizeWithFont:font];
     
+    float widthDelta = 0, heightDelta = 0;
+    
     if(self.arrowPosition==CRArrowPositionLeft||self.arrowPosition==CRArrowPositionRight)
     {
         y+=self.attachedFrame.size.height/2-size.height/2;
         x+=(self.arrowPosition==CRArrowPositionLeft)? ARROW_SPACE+self.attachedFrame.size.width : -(ARROW_SPACE*2+size.width);
+        widthDelta = ARROW_SIZE;
         
     }else if(self.arrowPosition==CRArrowPositionTop||self.arrowPosition==CRArrowPositionBottom)
     {
         x+=self.attachedFrame.size.width/2-size.width/2;
         y+=(self.arrowPosition==CRArrowPositionTop)? ARROW_SPACE+self.attachedFrame.size.height : -(ARROW_SPACE*2+size.height);
+        heightDelta = ARROW_SIZE;
     }
     
-    return CGRectMake(x, y, size.width+ARROW_SIZE, size.height+ARROW_SIZE);
+    return CGRectMake(x, y, size.width+widthDelta, size.height+heightDelta);
 }
 
 -(CGSize)sizeWithFont:(UIFont*)font
 {
     // Calcultation of the bubble size
     // size of bubble title determined by the strings attributes
-    CGSize offset = [self offsets];
     CGRect window = [[[UIApplication sharedApplication] keyWindow] frame];
     
-    CGSize result = [_title sizeWithFont:font constrainedToSize:CGSizeMake(window.size.width - offset.width - (PADDING*4), FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+    float widthDelta = 0;
+    if(self.arrowPosition==CRArrowPositionLeft||self.arrowPosition==CRArrowPositionRight)
+    {
+        // Make space for an arrow on one side
+        widthDelta = ARROW_SIZE;
+    }
+    
+    CGSize result = [_title sizeWithFont:font constrainedToSize:CGSizeMake(window.size.width - widthDelta - (PADDING*3), FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
     
     return CGSizeMake(result.width + (PADDING*3), result.height + (PADDING*2.5));
 }
