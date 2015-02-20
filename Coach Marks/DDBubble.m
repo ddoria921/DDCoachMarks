@@ -55,6 +55,9 @@
     [self setFrame:[self calculateFrameWithFont:font]];
     [self fixFrameIfOutOfBounds];
     
+    // Make it pass touch events through to the DDCoachMarksView
+    [self setUserInteractionEnabled:NO];
+    
     // calculate and position text
     CGSize offsets = [self offsets];
     float actualXPosition = offsets.width+PADDING*1.5;
@@ -71,8 +74,8 @@
     [titleLabel setBackgroundColor:[UIColor clearColor]];
     [titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
     [titleLabel setNumberOfLines:0];
+    [titleLabel setUserInteractionEnabled:NO];
     [self addSubview:titleLabel];
-    
     
     [self setNeedsDisplay];
     return self;
