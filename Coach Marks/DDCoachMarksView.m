@@ -175,16 +175,16 @@ static const CGFloat    kLblSpacing = 35.0f;
 
     // Current index
     markIndex = index;
-
-    // Coach mark definition
-    NSDictionary *markDef = [self.coachMarks objectAtIndex:index];
-    CGRect markRect = [[markDef objectForKey:@"rect"] CGRectValue];
-    NSString *shape = [markDef objectForKey:@"shape"];
     
     // Delegate (coachMarksView:willNavigateTo:atIndex:)
     if ([self.delegate respondsToSelector:@selector(coachMarksView:willNavigateToIndex:)]) {
         [self.delegate coachMarksView:self willNavigateToIndex:markIndex];
     }
+    
+    // Coach mark definition
+    NSDictionary *markDef = [self.coachMarks objectAtIndex:index];
+    CGRect markRect = [[markDef objectForKey:@"rect"] CGRectValue];
+    NSString *shape = [markDef objectForKey:@"shape"];
 
     if (self.useBubbles) {
         [self animateNextBubble];
