@@ -54,7 +54,7 @@
             self.transform = CGAffineTransformConcat(translateRight, scale);
         }
         self.alpha = 0.0f;
-        [UIView animateKeyframesWithDuration:0.6 delay:0.3 options:0
+        [UIView animateWithDuration:0.6 delay:0.3 options:0
                                   animations:^{
                                       // Fade In
                                       if (self.swipeDirection == kCircleSwipeLeftToRight) {
