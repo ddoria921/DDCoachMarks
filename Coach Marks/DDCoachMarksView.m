@@ -175,16 +175,16 @@ static const CGFloat    kLblSpacing = 35.0f;
 
     // Current index
     markIndex = index;
-
-    // Coach mark definition
-    NSDictionary *markDef = [self.coachMarks objectAtIndex:index];
-    CGRect markRect = [[markDef objectForKey:@"rect"] CGRectValue];
-    NSString *shape = [markDef objectForKey:@"shape"];
     
     // Delegate (coachMarksView:willNavigateTo:atIndex:)
     if ([self.delegate respondsToSelector:@selector(coachMarksView:willNavigateToIndex:)]) {
         [self.delegate coachMarksView:self willNavigateToIndex:markIndex];
     }
+    
+    // Coach mark definition
+    NSDictionary *markDef = [self.coachMarks objectAtIndex:index];
+    CGRect markRect = [[markDef objectForKey:@"rect"] CGRectValue];
+    NSString *shape = [markDef objectForKey:@"shape"];
 
     if (self.useBubbles) {
         [self animateNextBubble];
@@ -230,7 +230,7 @@ static const CGFloat    kLblSpacing = 35.0f;
 
     // create an animating circle and animate it
     if (shouldAnimateSwipe) {
-        self.animatingCircle = [[DDCircleView alloc] initWithFrame:CGRectZero];
+        self.animatingCircle = [[DDCircleView alloc] initWithFrame:self.frame];
         
         if (![self.subviews containsObject:self.animatingCircle]) {
             [self addSubview:self.animatingCircle];
@@ -255,7 +255,7 @@ static const CGFloat    kLblSpacing = 35.0f;
     
     // remove previous bubble
     if (self.bubble) {
-        [UIView animateKeyframesWithDuration:0.3 delay:0.0 options:0
+        [UIView animateWithDuration:0.3 delay:0.0 options:0
                                   animations:^{
                                       self.bubble.alpha = 0.0;
                                   } completion:nil];
@@ -277,7 +277,7 @@ static const CGFloat    kLblSpacing = 35.0f;
     [self addSubview:self.bubble];
     
     // fade in & bounce animation
-    [UIView animateKeyframesWithDuration:0.8 delay:0.3 options:0
+    [UIView animateWithDuration:0.8 delay:0.3 options:0
                               animations:^{
                                   self.bubble.alpha = 1.0;
                                   [self.bubble animate];
@@ -297,7 +297,7 @@ static const CGFloat    kLblSpacing = 35.0f;
     __weak DDCoachMarksView *weakSelf = self;
     
     // animate & remove from super view
-    [UIView animateKeyframesWithDuration:0.6 delay:0.3 options:0
+    [UIView animateWithDuration:0.6 delay:0.3 options:0
                               animations:^{
                                   self.alpha = 0.0f;
                                   self.animatingCircle.alpha = 0.0f;

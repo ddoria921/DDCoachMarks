@@ -38,7 +38,7 @@
 
 - (void)swipeInFrame:(CGRect)frame
 {
-    [self centerYPositioninView:self inFrame:frame];
+    [self centerInView:self inFrame:frame];
     [self animateSwipe];
 }
 
@@ -54,7 +54,7 @@
             self.transform = CGAffineTransformConcat(translateRight, scale);
         }
         self.alpha = 0.0f;
-        [UIView animateKeyframesWithDuration:0.6 delay:0.3 options:0
+        [UIView animateWithDuration:0.6 delay:0.3 options:0
                                   animations:^{
                                       // Fade In
                                       if (self.swipeDirection == kCircleSwipeLeftToRight) {
@@ -101,7 +101,7 @@
 - (void)centerXPositioninView:(UIView *)view inFrame:(CGRect)frame
 {
     CGFloat centerX = frame.origin.x + CGRectGetWidth(frame)/2;
-    CGFloat offsetX = CGRectGetWidth(view.frame)/2;
+    CGFloat offsetX = 260/2;
     
     CGFloat newX = centerX - offsetX;
     view.frame = CGRectMake(newX, view.frame.origin.y, 40, 40);
