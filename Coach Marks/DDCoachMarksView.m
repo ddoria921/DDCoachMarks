@@ -75,7 +75,8 @@ static const CGFloat    kLblSpacing = 35.0f;
 
     // Capture touches
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userDidTap:)];
-    UISwipeGestureRecognizer *swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:nil];
+    UISwipeGestureRecognizer *swipeGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(userDidTap:)];
+    swipeGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight;
     [self addGestureRecognizer:swipeGestureRecognizer];
     [self addGestureRecognizer:tapGestureRecognizer];
     
