@@ -49,7 +49,8 @@ Create a new DDCoachMarksView instance and pass in an array of coach mark defini
                                 @"rect": [NSValue valueWithCGRect:CGRectMake(0, 125, 320, 60)],
                                 @"caption": @"Swipe for more options",
                                 @"shape": @"square",
-                                @"swipe": @"YES"
+                                @"swipe": @"YES",
+				@"font": [UIFont systemFontOfSize: 14.0]
                                 },
                             ];
 
