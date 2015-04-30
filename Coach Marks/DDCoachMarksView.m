@@ -253,6 +253,7 @@ static const CGFloat    kLblSpacing = 35.0f;
     NSString *markCaption = [coachMarkInfo objectForKey:@"caption"];
     CGRect frame = [[coachMarkInfo objectForKey:@"rect"] CGRectValue];
     CGRect poi = [[coachMarkInfo objectForKey:@"POI"] CGRectValue];
+    UIFont *font = [coachMarkInfo objectForKey:@"font"];
     
     // remove previous bubble
     if (self.bubble) {
@@ -270,9 +271,9 @@ static const CGFloat    kLblSpacing = 35.0f;
     // IF using point of interest (poi) frame use that instead of cutout frame
     // ELSE use the cutout frame
     if (CGRectIsEmpty(poi)) {
-        self.bubble = [[DDBubble alloc] initWithFrame:frame title:markCaption description:nil arrowPosition:CRArrowPositionTop andColor:nil];
+        self.bubble = [[DDBubble alloc] initWithFrame:frame title:markCaption description:nil arrowPosition:CRArrowPositionTop color:nil andFont:font];
     } else
-        self.bubble = [[DDBubble alloc] initWithFrame:poi title:markCaption description:nil arrowPosition:CRArrowPositionTop andColor:nil];
+        self.bubble = [[DDBubble alloc] initWithFrame:poi title:markCaption description:nil arrowPosition:CRArrowPositionTop color:nil andFont:font];
 
     self.bubble.alpha = 0.0;
     [self addSubview:self.bubble];

@@ -25,8 +25,11 @@ typedef enum {
 @property (nonatomic)           CGRect attachedFrame;
 @property (nonatomic)           BOOL  bouncing;
 @property (nonatomic)           BOOL animationShouldStop;
+@property (nonatomic)           UIFont *font;
 
 -(id)initWithAttachedView:(UIView*)view title:(NSString*)title description:(NSString*)description arrowPosition:(CRArrowPosition)arrowPosition andColor:(UIColor*)color;
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title description:(NSString*)description arrowPosition:(CRArrowPosition)arrowPosition andColor:(UIColor*)color;
+-(id)initWithFrame:(CGRect)frame title:(NSString*)title description:(NSString*)description arrowPosition:(CRArrowPosition)arrowPosition color:(UIColor*)color andFont:(UIFont *)font;
+
 -(void)animate;
 @end
