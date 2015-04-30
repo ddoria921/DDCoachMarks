@@ -50,7 +50,7 @@ Create a new DDCoachMarksView instance and pass in an array of coach mark defini
                                 @"caption": @"Swipe for more options",
                                 @"shape": @"square",
                                 @"swipe": @"YES",
-			        @"font": [UIFont systemFontOfSize: 14.0]
+                                @"font": [UIFont systemFontOfSize: 14.0]
                                 },
                             ];
 
