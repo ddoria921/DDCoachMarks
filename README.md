@@ -49,7 +49,8 @@ Create a new DDCoachMarksView instance and pass in an array of coach mark defini
                                 @"rect": [NSValue valueWithCGRect:CGRectMake(0, 125, 320, 60)],
                                 @"caption": @"Swipe for more options",
                                 @"shape": @"square",
-                                @"swipe": @"YES"
+                                @"swipe": @"YES",
+                                @"font": [UIFont systemFontOfSize: 14.0]
                                 },
                             ];
 
@@ -93,6 +94,8 @@ Text that goes in the bubbles
  Use "YES" here if you want to show a row swipe gesture on a table view cell. Disabled by default.
 * `@"direction"`
  Direction that swipe gestures should animate in. The default is `@"lefttoright"` but you can also specify `@"righttoleft"`.
+* `@"font"`
+ Font for the caption in the bubble. If not specified, defaults to the default HelveticaNeue size 14.0.
 
 ## DDCoachMarksViewDelegate
 

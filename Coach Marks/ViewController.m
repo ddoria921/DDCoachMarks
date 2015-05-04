@@ -28,7 +28,8 @@
                             @{
                                 @"rect": [NSValue valueWithCGRect:CGRectMake(6, 24, 40, 40)],
                                 @"caption": @"Synchronize your mail",
-                                @"shape": @"circle"
+                                @"shape": @"circle",
+                                @"font": [UIFont boldSystemFontOfSize:14.0]
                                 },
                             @{
                                 @"rect": [NSValue valueWithCGRect:CGRectMake(275, 24, 40, 40)],

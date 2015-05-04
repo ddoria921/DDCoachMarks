@@ -13,7 +13,7 @@
 #define PADDING 8 // padding between text and border of bubble
 #define RADIUS 6
 #define TEXT_COLOR [UIColor blackColor]
-#define TITLE_FONT_SIZE 14
+#define DEFAULT_TITLE_FONT_SIZE 14
 
 @interface DDBubble ()
 {
@@ -34,6 +34,11 @@
 
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title description:(NSString*)description arrowPosition:(CRArrowPosition)arrowPosition andColor:(UIColor*)color
 {
+    return [self initWithFrame:frame title:title description:description arrowPosition:arrowPosition color:color andFont:nil];
+}
+
+-(id)initWithFrame:(CGRect)frame title:(NSString*)title description:(NSString*)description arrowPosition:(CRArrowPosition)arrowPosition color:(UIColor*)color andFont:(UIFont *)font
+{
     self = [super init];
     if(self)
     {
@@ -42,6 +47,11 @@
         else
             self.color=[UIColor whiteColor];
         
+        if (font != nil)
+            self.font = font;
+        else
+            self.font = [UIFont fontWithName:@"HelveticaNeue" size:DEFAULT_TITLE_FONT_SIZE];
+        
         self.attachedFrame = frame;
         self.title = title;
         self.bubbleText = description;
@@ -49,10 +59,8 @@
         [self setBackgroundColor:[UIColor clearColor]];
     }
     
-    UIFont* font = [self font];
-    
     // position bubble
-    [self setFrame:[self calculateFrameWithFont:font]];
+    [self setFrame:[self calculateFrameWithFont:self.font]];
     [self fixFrameIfOutOfBounds];
     
     // Make it pass touch events through to the DDCoachMarksView
@@ -66,10 +74,9 @@
     float actualHeight = self.frame.size.height - actualYPosition - PADDING*1.2;
     
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(actualXPosition, actualYPosition, actualWidth, actualHeight)];
-    [titleLabel setFont:font];
+    [titleLabel setFont:self.font];
     [titleLabel setTextColor:TEXT_COLOR];
     [titleLabel setAlpha:0.9];
-    [titleLabel setFont:font];
     [titleLabel setText:title];
     [titleLabel setBackgroundColor:[UIColor clearColor]];
     [titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
@@ -79,10 +86,6 @@
     
     [self setNeedsDisplay];
     return self;
-}
-
-- (UIFont*) font {
-    return [UIFont fontWithName:@"HelveticaNeue" size:TITLE_FONT_SIZE];
 }
 
 
