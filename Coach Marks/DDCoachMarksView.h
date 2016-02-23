@@ -23,6 +23,7 @@
 @property (nonatomic)           BOOL    useBubbles;
 
 - (id)initWithFrame:(CGRect)frame coachMarks:(NSArray *)marks;
+- (void)setMaskColor:(UIColor *)maskColor;
 - (void)start;
 
 @end
