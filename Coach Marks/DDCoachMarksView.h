@@ -19,12 +19,18 @@
 @property (nonatomic)           CGFloat animationDuration;
 @property (nonatomic)           CGFloat cutoutRadius;
 @property (nonatomic)           CGFloat maxLblWidth;
+@property (nonatomic)           CGFloat LblFontSize;
 @property (nonatomic)           CGFloat lblSpacing;
 @property (nonatomic)           BOOL    useBubbles;
+@property (nonatomic)           BOOL enableContinueLabel;
+@property (nonatomic)           BOOL enableSkipButton;
+@property (nonatomic)           BOOL enableTapAction;
+
 
 - (id)initWithFrame:(CGRect)frame coachMarks:(NSArray *)marks;
 - (void)setMaskColor:(UIColor *)maskColor;
 - (void)start;
+- (void)stop;
 
 @end
 
