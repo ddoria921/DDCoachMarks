@@ -85,7 +85,9 @@ coachMarksView.useBubbles = NO;
 When creating your array of dictionary definitions for each coach mark only the `@"rect"` value is required. 
 Other optional values are:
 * `@"caption"` 
-Text that goes in the bubbles
+ Text that goes in the bubbles
+* `@"title"`
+ An optional title to go above the caption
 * `@"shape"`
  Can be set to circle or square. If nothing is defined, the default is a rounded rect.
 * `@"POI"`
@@ -95,7 +97,9 @@ Text that goes in the bubbles
 * `@"direction"`
  Direction that swipe gestures should animate in. The default is `@"lefttoright"` but you can also specify `@"righttoleft"`.
 * `@"font"`
- Font for the caption in the bubble. If not specified, defaults to the default HelveticaNeue size 14.0.
+ Font for the caption in the bubble. If not specified, defaults to the system font size 14.0.
+* `@"titlefont"`
+ Font for the title caption in the bubble. If not specified, defaults to the bold system font size 14.0.
 
 ## DDCoachMarksViewDelegate
 
