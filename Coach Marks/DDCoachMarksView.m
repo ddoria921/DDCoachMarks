@@ -250,10 +250,12 @@ static const CGFloat    kLblSpacing = 35.0f;
 {
     // Get current coach mark information
     NSDictionary *coachMarkInfo = [self.coachMarks objectAtIndex:markIndex];
+    NSString *markTitle = [coachMarkInfo objectForKey:@"title"];
     NSString *markCaption = [coachMarkInfo objectForKey:@"caption"];
     CGRect frame = [[coachMarkInfo objectForKey:@"rect"] CGRectValue];
     CGRect poi = [[coachMarkInfo objectForKey:@"POI"] CGRectValue];
     UIFont *font = [coachMarkInfo objectForKey:@"font"];
+    UIFont *titleFont = [coachMarkInfo objectForKey:@"titlefont"];
     
     // remove previous bubble
     if (self.bubble) {
@@ -264,16 +266,16 @@ static const CGFloat    kLblSpacing = 35.0f;
     }
     
     // return if no text for bubble
-    if ([markCaption length] == 0)
+    if (([markCaption length] == 0) && ([markTitle length] == 0))
         return;
     
     // create bubble
     // IF using point of interest (poi) frame use that instead of cutout frame
     // ELSE use the cutout frame
     if (CGRectIsEmpty(poi)) {
-        self.bubble = [[DDBubble alloc] initWithFrame:frame title:markCaption description:nil arrowPosition:CRArrowPositionTop color:nil andFont:font];
+        self.bubble = [[DDBubble alloc] initWithFrame:frame title:markTitle description:markCaption arrowPosition:CRArrowPositionTop color:nil andFont:font titleFont:titleFont];
     } else
-        self.bubble = [[DDBubble alloc] initWithFrame:poi title:markCaption description:nil arrowPosition:CRArrowPositionTop color:nil andFont:font];
+        self.bubble = [[DDBubble alloc] initWithFrame:poi title:markTitle description:markCaption arrowPosition:CRArrowPositionTop color:nil andFont:font titleFont:titleFont];
 
     self.bubble.alpha = 0.0;
     [self addSubview:self.bubble];

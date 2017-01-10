@@ -26,10 +26,12 @@ typedef enum {
 @property (nonatomic)           BOOL  bouncing;
 @property (nonatomic)           BOOL animationShouldStop;
 @property (nonatomic)           UIFont *font;
+@property (nonatomic)           UIFont *titleFont;
 
 -(id)initWithAttachedView:(UIView*)view title:(NSString*)title description:(NSString*)description arrowPosition:(CRArrowPosition)arrowPosition andColor:(UIColor*)color;
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title description:(NSString*)description arrowPosition:(CRArrowPosition)arrowPosition andColor:(UIColor*)color;
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title description:(NSString*)description arrowPosition:(CRArrowPosition)arrowPosition color:(UIColor*)color andFont:(UIFont *)font;
+-(id)initWithFrame:(CGRect)frame title:(NSString*)title description:(NSString*)description arrowPosition:(CRArrowPosition)arrowPosition color:(UIColor*)color andFont:(UIFont *)font titleFont:(UIFont*)titleFont;
 
 -(void)animate;
 @end
