@@ -141,6 +141,18 @@ static const CGFloat    kLblSpacing = 35.0f;
 
 #pragma mark - Touch handler
 
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    
+    // See if tap was inside the cutout or not
+    BOOL isOutsideCutout = !self.transmitTouchesInCutout || CGPathContainsPoint(mask.path, NULL, point, true);
+    
+    if (!isOutsideCutout) {
+        [self cleanup];
+    }
+    
+    return isOutsideCutout;
+}
+
 - (void)userDidTap:(UITapGestureRecognizer *)recognizer {
     
     if ([self.delegate respondsToSelector:@selector(didTapAtIndex:)]) {
@@ -301,7 +313,9 @@ static const CGFloat    kLblSpacing = 35.0f;
     __weak DDCoachMarksView *weakSelf = self;
     
     // animate & remove from super view
-    [UIView animateWithDuration:0.6 delay:0.3 options:0
+    // Need UIViewAnimationOptionAllowUserInteraction option if triggered by touching inside the cutout,
+    // else it cancels the touch that triggered the cleanup in the first place
+    [UIView animateWithDuration:0.6 delay:0.3 options:UIViewAnimationOptionAllowUserInteraction
                               animations:^{
                                   self.alpha = 0.0f;
                                   self.animatingCircle.alpha = 0.0f;

@@ -78,6 +78,7 @@ You can configure any coach mark properties before calling the `start` method. F
 coachMarksView.animationDuration = 0.5f;
 coachMarksView.maskColor = [UIColor blueColor];
 coachMarksView.useBubbles = NO;
+coachMarksView.transmitTouchesInCutout = NO;	// Don't allow the user to interact with the element being showcased (default)
 [coachMarksView start];
 ```
 

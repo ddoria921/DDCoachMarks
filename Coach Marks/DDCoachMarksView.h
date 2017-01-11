@@ -21,6 +21,7 @@
 @property (nonatomic)           CGFloat maxLblWidth;
 @property (nonatomic)           CGFloat lblSpacing;
 @property (nonatomic)           BOOL    useBubbles;
+@property (nonatomic)           BOOL    transmitTouchesInCutout;
 
 - (id)initWithFrame:(CGRect)frame coachMarks:(NSArray *)marks;
 - (void)setMaskColor:(UIColor *)maskColor;
