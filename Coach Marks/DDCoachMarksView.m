@@ -196,7 +196,7 @@ static const CGFloat    kLblSpacing = 35.0f;
     
     // Coach mark definition
     NSDictionary *markDef = [self.coachMarks objectAtIndex:index];
-    CGRect markRect = [[markDef objectForKey:@"rect"] CGRectValue];
+    CGRect markRect = [self frameFromCoachMark:markDef];
     NSString *shape = [markDef objectForKey:@"shape"];
 
     if (self.useBubbles) {
@@ -222,7 +222,7 @@ static const CGFloat    kLblSpacing = 35.0f;
 - (void)showSwipeGesture
 {
     NSDictionary *coachMarkInfo = [self.coachMarks objectAtIndex:markIndex];
-    CGRect frame = [[coachMarkInfo objectForKey:@"rect"] CGRectValue];
+    CGRect frame = [self frameFromCoachMark:coachMarkInfo];
     BOOL shouldAnimateSwipe = [[coachMarkInfo objectForKey:@"swipe"] boolValue];
     
     NSString* swipeDirection = [coachMarkInfo objectForKey:@"direction"];
@@ -258,14 +258,42 @@ static const CGFloat    kLblSpacing = 35.0f;
 
 #pragma mark - Bubble Caption
 
+- (CGRect)frameFromCoachMark:(NSDictionary*)coachMarkInfo {
+    CGRect frame = [[coachMarkInfo objectForKey:@"rect"] CGRectValue];
+    CGRect poi = [[coachMarkInfo objectForKey:@"POI"] CGRectValue];
+    UIView *attachedView = [coachMarkInfo objectForKey:@"attachedview"];
+    NSValue *transformValue = [coachMarkInfo objectForKey:@"transform"];
+    
+    // IF using point of interest (poi) frame use that instead of cutout frame
+    // ELSE use the cutout frame
+    CGRect viewBounds = CGRectZero;
+    if (attachedView != nil) {
+        viewBounds = attachedView.bounds;
+    } else if (CGRectIsEmpty(poi)) {
+        viewBounds = frame;
+    } else {
+        viewBounds = poi;
+    }
+    
+    if (transformValue != nil) {
+        // Apply the given transform
+        CGAffineTransform transform = [transformValue CGAffineTransformValue];
+        viewBounds = CGRectApplyAffineTransform(viewBounds, transform);
+    }
+    
+    if (attachedView != nil) {
+        viewBounds = [attachedView convertRect:viewBounds toView:self];
+    }
+    
+    return viewBounds;
+}
+
 - (void)animateNextBubble
 {
     // Get current coach mark information
     NSDictionary *coachMarkInfo = [self.coachMarks objectAtIndex:markIndex];
     NSString *markTitle = [coachMarkInfo objectForKey:@"title"];
     NSString *markCaption = [coachMarkInfo objectForKey:@"caption"];
-    CGRect frame = [[coachMarkInfo objectForKey:@"rect"] CGRectValue];
-    CGRect poi = [[coachMarkInfo objectForKey:@"POI"] CGRectValue];
     UIFont *font = [coachMarkInfo objectForKey:@"font"];
     UIFont *titleFont = [coachMarkInfo objectForKey:@"titlefont"];
     
@@ -282,12 +310,8 @@ static const CGFloat    kLblSpacing = 35.0f;
         return;
     
     // create bubble
-    // IF using point of interest (poi) frame use that instead of cutout frame
-    // ELSE use the cutout frame
-    if (CGRectIsEmpty(poi)) {
-        self.bubble = [[DDBubble alloc] initWithFrame:frame title:markTitle description:markCaption arrowPosition:CRArrowPositionTop color:nil andFont:font titleFont:titleFont];
-    } else
-        self.bubble = [[DDBubble alloc] initWithFrame:poi title:markTitle description:markCaption arrowPosition:CRArrowPositionTop color:nil andFont:font titleFont:titleFont];
+    CGRect frame = [self frameFromCoachMark:coachMarkInfo];
+    self.bubble = [[DDBubble alloc] initWithFrame:frame title:markTitle description:markCaption arrowPosition:CRArrowPositionTop color:nil andFont:font titleFont:titleFont];
 
     self.bubble.alpha = 0.0;
     [self addSubview:self.bubble];

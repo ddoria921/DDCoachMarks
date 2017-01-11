@@ -46,7 +46,7 @@ Create a new DDCoachMarksView instance and pass in an array of coach mark defini
                                 @"shape": @"circle",
                                 },
                             @{
-                                @"rect": [NSValue valueWithCGRect:CGRectMake(0, 125, 320, 60)],
+                                @"attachedview": self.viewToHighlight,
                                 @"caption": @"Swipe for more options",
                                 @"shape": @"square",
                                 @"swipe": @"YES",
@@ -93,6 +93,10 @@ Other optional values are:
  Can be set to circle or square. If nothing is defined, the default is a rounded rect.
 * `@"POI"`
  Stands for 'point of interest'. You can define a whole region using the `@"rect"` value, but defining a different CGRect value here makes the bubble caption position itself under the POI rect.
+* `@"attachedview"`
+ Specify a specific UIView to highlight instead of a manually specified `@"rect"` or `@"POI"`.
+* `@"transform"`
+ Specify an optional CGAffineTransform that will be applied to the `@"rect"`, `@"POI"` or `@"attachedview"` frame. Especially useful if you want to modify the frame of the `@"attachedview"` in any way before highlighting.
 * `@"swipe"`
  Use "YES" here if you want to show a row swipe gesture on a table view cell. Disabled by default.
 * `@"direction"`
