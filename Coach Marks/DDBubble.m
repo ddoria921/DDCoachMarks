@@ -85,7 +85,7 @@
     
     UILabel *titleLabel = nil;
     
-    if (title.length > 0) {
+    if ((title.length > 0) && ([self respondsToSelector:@selector(addConstraint:)])) {
         titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(actualXPosition, actualYPosition, actualWidth, actualHeight)];
         [titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
         [titleLabel setFont:self.titleFont];
@@ -105,7 +105,9 @@
     
     if (description.length > 0) {
         UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(actualXPosition, actualYPosition, actualWidth, actualHeight)];
-        [bodyLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        if ([bodyLabel respondsToSelector:@selector(setTranslatesAutoresizingMaskIntoConstraints:)]) {
+            [bodyLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        }
         [bodyLabel setFont:self.font];
         [bodyLabel setTextColor:TEXT_COLOR];
         [bodyLabel setAlpha:0.9];
@@ -116,14 +118,16 @@
         [bodyLabel setUserInteractionEnabled:NO];
         [self addSubview:bodyLabel];
         
-        if (titleLabel != nil) {
-            // Add some constraints
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:bodyLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:titleLabel attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f]];
-        } else {
-            [self addConstraint:[NSLayoutConstraint constraintWithItem:bodyLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0f constant:actualYPosition]];
+        if ([bodyLabel respondsToSelector:@selector(setTranslatesAutoresizingMaskIntoConstraints:)]) {
+            if (titleLabel != nil) {
+                // Add some constraints
+                [self addConstraint:[NSLayoutConstraint constraintWithItem:bodyLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:titleLabel attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f]];
+            } else {
+                [self addConstraint:[NSLayoutConstraint constraintWithItem:bodyLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0f constant:actualYPosition]];
+            }
+            [self addConstraint:[NSLayoutConstraint constraintWithItem:bodyLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.0f constant:(-offsets.width - PADDING*3.0 + 1)]];
+            [self addConstraint:[NSLayoutConstraint constraintWithItem:bodyLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0f constant:actualXPosition]];
         }
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:bodyLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.0f constant:(-offsets.width - PADDING*3.0 + 1)]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:bodyLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0f constant:actualXPosition]];
     }
     
     [self setNeedsDisplay];
