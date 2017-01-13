@@ -177,7 +177,7 @@
         
         // Restart the entire process
         CGRect flippedFrame = [self calculateFrame];
-        y = flippedFrame.origin.y;
+        y = MAX(flippedFrame.origin.y, 10);
         height = flippedFrame.size.height;
     } else if ((self.arrowPosition == CRArrowPositionBottom) && (y < 0)) {
         self.arrowPosition = CRArrowPositionTop;
