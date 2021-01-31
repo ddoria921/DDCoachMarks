@@ -141,6 +141,18 @@ static const CGFloat    kLblSpacing = 35.0f;
 
 #pragma mark - Touch handler
 
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    
+    // See if tap was inside the cutout or not
+    BOOL isOutsideCutout = !self.transmitTouchesInCutout || CGPathContainsPoint(mask.path, NULL, point, true);
+    
+    if (!isOutsideCutout) {
+        [self cleanup];
+    }
+    
+    return isOutsideCutout;
+}
+
 - (void)userDidTap:(UITapGestureRecognizer *)recognizer {
     
     if ([self.delegate respondsToSelector:@selector(didTapAtIndex:)]) {
@@ -184,7 +196,7 @@ static const CGFloat    kLblSpacing = 35.0f;
     
     // Coach mark definition
     NSDictionary *markDef = [self.coachMarks objectAtIndex:index];
-    CGRect markRect = [[markDef objectForKey:@"rect"] CGRectValue];
+    CGRect markRect = [self frameFromCoachMark:markDef];
     NSString *shape = [markDef objectForKey:@"shape"];
 
     if (self.useBubbles) {
@@ -210,7 +222,7 @@ static const CGFloat    kLblSpacing = 35.0f;
 - (void)showSwipeGesture
 {
     NSDictionary *coachMarkInfo = [self.coachMarks objectAtIndex:markIndex];
-    CGRect frame = [[coachMarkInfo objectForKey:@"rect"] CGRectValue];
+    CGRect frame = [self frameFromCoachMark:coachMarkInfo];
     BOOL shouldAnimateSwipe = [[coachMarkInfo objectForKey:@"swipe"] boolValue];
     
     NSString* swipeDirection = [coachMarkInfo objectForKey:@"direction"];
@@ -246,14 +258,44 @@ static const CGFloat    kLblSpacing = 35.0f;
 
 #pragma mark - Bubble Caption
 
+- (CGRect)frameFromCoachMark:(NSDictionary*)coachMarkInfo {
+    CGRect frame = [[coachMarkInfo objectForKey:@"rect"] CGRectValue];
+    CGRect poi = [[coachMarkInfo objectForKey:@"POI"] CGRectValue];
+    UIView *attachedView = [coachMarkInfo objectForKey:@"attachedview"];
+    NSValue *transformValue = [coachMarkInfo objectForKey:@"transform"];
+    
+    // IF using point of interest (poi) frame use that instead of cutout frame
+    // ELSE use the cutout frame
+    CGRect viewBounds = CGRectZero;
+    if (attachedView != nil) {
+        viewBounds = attachedView.bounds;
+    } else if (CGRectIsEmpty(poi)) {
+        viewBounds = frame;
+    } else {
+        viewBounds = poi;
+    }
+    
+    if (transformValue != nil) {
+        // Apply the given transform
+        CGAffineTransform transform = [transformValue CGAffineTransformValue];
+        viewBounds = CGRectApplyAffineTransform(viewBounds, transform);
+    }
+    
+    if (attachedView != nil) {
+        viewBounds = [attachedView convertRect:viewBounds toView:self];
+    }
+    
+    return viewBounds;
+}
+
 - (void)animateNextBubble
 {
     // Get current coach mark information
     NSDictionary *coachMarkInfo = [self.coachMarks objectAtIndex:markIndex];
+    NSString *markTitle = [coachMarkInfo objectForKey:@"title"];
     NSString *markCaption = [coachMarkInfo objectForKey:@"caption"];
-    CGRect frame = [[coachMarkInfo objectForKey:@"rect"] CGRectValue];
-    CGRect poi = [[coachMarkInfo objectForKey:@"POI"] CGRectValue];
     UIFont *font = [coachMarkInfo objectForKey:@"font"];
+    UIFont *titleFont = [coachMarkInfo objectForKey:@"titlefont"];
     
     // remove previous bubble
     if (self.bubble) {
@@ -264,16 +306,12 @@ static const CGFloat    kLblSpacing = 35.0f;
     }
     
     // return if no text for bubble
-    if ([markCaption length] == 0)
+    if (([markCaption length] == 0) && ([markTitle length] == 0))
         return;
     
     // create bubble
-    // IF using point of interest (poi) frame use that instead of cutout frame
-    // ELSE use the cutout frame
-    if (CGRectIsEmpty(poi)) {
-        self.bubble = [[DDBubble alloc] initWithFrame:frame title:markCaption description:nil arrowPosition:CRArrowPositionTop color:nil andFont:font];
-    } else
-        self.bubble = [[DDBubble alloc] initWithFrame:poi title:markCaption description:nil arrowPosition:CRArrowPositionTop color:nil andFont:font];
+    CGRect frame = [self frameFromCoachMark:coachMarkInfo];
+    self.bubble = [[DDBubble alloc] initWithFrame:frame title:markTitle description:markCaption arrowPosition:CRArrowPositionTop color:nil andFont:font titleFont:titleFont];
 
     self.bubble.alpha = 0.0;
     [self addSubview:self.bubble];
@@ -299,7 +337,9 @@ static const CGFloat    kLblSpacing = 35.0f;
     __weak DDCoachMarksView *weakSelf = self;
     
     // animate & remove from super view
-    [UIView animateWithDuration:0.6 delay:0.3 options:0
+    // Need UIViewAnimationOptionAllowUserInteraction option if triggered by touching inside the cutout,
+    // else it cancels the touch that triggered the cleanup in the first place
+    [UIView animateWithDuration:0.6 delay:0.3 options:UIViewAnimationOptionAllowUserInteraction
                               animations:^{
                                   self.alpha = 0.0f;
                                   self.animatingCircle.alpha = 0.0f;

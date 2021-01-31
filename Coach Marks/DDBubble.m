@@ -39,6 +39,11 @@
 
 -(id)initWithFrame:(CGRect)frame title:(NSString*)title description:(NSString*)description arrowPosition:(CRArrowPosition)arrowPosition color:(UIColor*)color andFont:(UIFont *)font
 {
+    return [self initWithFrame:frame title:title description:description arrowPosition:arrowPosition color:color andFont:font titleFont:nil];
+}
+
+-(id)initWithFrame:(CGRect)frame title:(NSString*)title description:(NSString*)description arrowPosition:(CRArrowPosition)arrowPosition color:(UIColor*)color andFont:(UIFont *)font titleFont:(UIFont*)titleFont
+{
     self = [super init];
     if(self)
     {
@@ -50,7 +55,12 @@
         if (font != nil)
             self.font = font;
         else
-            self.font = [UIFont fontWithName:@"HelveticaNeue" size:DEFAULT_TITLE_FONT_SIZE];
+            self.font = [UIFont systemFontOfSize:DEFAULT_TITLE_FONT_SIZE];
+        
+        if (titleFont != nil)
+            self.titleFont = titleFont;
+        else
+            self.titleFont = [UIFont boldSystemFontOfSize:DEFAULT_TITLE_FONT_SIZE];
         
         self.attachedFrame = frame;
         self.title = title;
@@ -60,7 +70,7 @@
     }
     
     // position bubble
-    [self setFrame:[self calculateFrameWithFont:self.font]];
+    [self setFrame:[self calculateFrame]];
     [self fixFrameIfOutOfBounds];
     
     // Make it pass touch events through to the DDCoachMarksView
@@ -73,16 +83,52 @@
     float actualWidth = self.frame.size.width-actualXPosition - PADDING*1.5;
     float actualHeight = self.frame.size.height - actualYPosition - PADDING*1.2;
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(actualXPosition, actualYPosition, actualWidth, actualHeight)];
-    [titleLabel setFont:self.font];
-    [titleLabel setTextColor:TEXT_COLOR];
-    [titleLabel setAlpha:0.9];
-    [titleLabel setText:title];
-    [titleLabel setBackgroundColor:[UIColor clearColor]];
-    [titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
-    [titleLabel setNumberOfLines:0];
-    [titleLabel setUserInteractionEnabled:NO];
-    [self addSubview:titleLabel];
+    UILabel *titleLabel = nil;
+    
+    if ((title.length > 0) && ([self respondsToSelector:@selector(addConstraint:)])) {
+        titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(actualXPosition, actualYPosition, actualWidth, actualHeight)];
+        [titleLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [titleLabel setFont:self.titleFont];
+        [titleLabel setTextColor:TEXT_COLOR];
+        [titleLabel setAlpha:0.9];
+        [titleLabel setText:title];
+        [titleLabel setBackgroundColor:[UIColor clearColor]];
+        [titleLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        [titleLabel setNumberOfLines:0];
+        [titleLabel setUserInteractionEnabled:NO];
+        [self addSubview:titleLabel];
+        
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:titleLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0f constant:actualYPosition]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:titleLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.0f constant:(-offsets.width - PADDING*3.0 + 1)]];
+        [self addConstraint:[NSLayoutConstraint constraintWithItem:titleLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0f constant:actualXPosition]];
+    }
+    
+    if (description.length > 0) {
+        UILabel *bodyLabel = [[UILabel alloc] initWithFrame:CGRectMake(actualXPosition, actualYPosition, actualWidth, actualHeight)];
+        if ([bodyLabel respondsToSelector:@selector(setTranslatesAutoresizingMaskIntoConstraints:)]) {
+            [bodyLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        }
+        [bodyLabel setFont:self.font];
+        [bodyLabel setTextColor:TEXT_COLOR];
+        [bodyLabel setAlpha:0.9];
+        [bodyLabel setText:description];
+        [bodyLabel setBackgroundColor:[UIColor clearColor]];
+        [bodyLabel setLineBreakMode:NSLineBreakByWordWrapping];
+        [bodyLabel setNumberOfLines:0];
+        [bodyLabel setUserInteractionEnabled:NO];
+        [self addSubview:bodyLabel];
+        
+        if ([bodyLabel respondsToSelector:@selector(setTranslatesAutoresizingMaskIntoConstraints:)]) {
+            if (titleLabel != nil) {
+                // Add some constraints
+                [self addConstraint:[NSLayoutConstraint constraintWithItem:bodyLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:titleLabel attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.0f]];
+            } else {
+                [self addConstraint:[NSLayoutConstraint constraintWithItem:bodyLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0f constant:actualYPosition]];
+            }
+            [self addConstraint:[NSLayoutConstraint constraintWithItem:bodyLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1.0f constant:(-offsets.width - PADDING*3.0 + 1)]];
+            [self addConstraint:[NSLayoutConstraint constraintWithItem:bodyLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0f constant:actualXPosition]];
+        }
+    }
     
     [self setNeedsDisplay];
     return self;
@@ -130,14 +176,14 @@
         self.arrowPosition = CRArrowPositionBottom;
         
         // Restart the entire process
-        CGRect flippedFrame = [self calculateFrameWithFont:[self font]];
-        y = flippedFrame.origin.y;
+        CGRect flippedFrame = [self calculateFrame];
+        y = MAX(flippedFrame.origin.y, 10);
         height = flippedFrame.size.height;
     } else if ((self.arrowPosition == CRArrowPositionBottom) && (y < 0)) {
         self.arrowPosition = CRArrowPositionTop;
         
         // Restart the entire process
-        CGRect flippedFrame = [self calculateFrameWithFont:[self font]];
+        CGRect flippedFrame = [self calculateFrame];
         y = flippedFrame.origin.y;
         height = flippedFrame.size.height;
     }
@@ -145,13 +191,13 @@
     [self setFrame:CGRectMake(x, y, width, height)];
 }
 
--(CGRect)calculateFrameWithFont:(UIFont*)font
+-(CGRect)calculateFrame
 {
     //Calculation of the bubble position
     float x = self.attachedFrame.origin.x;
     float y = self.attachedFrame.origin.y;
     
-    CGSize size = [self sizeWithFont:font];
+    CGSize size = [self calculateSize];
     
     float widthDelta = 0, heightDelta = 0;
     
@@ -171,7 +217,7 @@
     return CGRectMake(x, y, size.width+widthDelta, size.height+heightDelta);
 }
 
--(CGSize)sizeWithFont:(UIFont*)font
+-(CGSize)calculateSize
 {
     // Calcultation of the bubble size
     // size of bubble title determined by the strings attributes
@@ -184,9 +230,17 @@
         widthDelta = ARROW_SIZE;
     }
     
-    CGSize result = [_title sizeWithFont:font constrainedToSize:CGSizeMake(window.size.width - widthDelta - (PADDING*3), FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize titleResult = CGSizeZero;
+    if (self.title.length > 0) {
+        titleResult = [self.title sizeWithFont:self.titleFont constrainedToSize:CGSizeMake(window.size.width - widthDelta - (PADDING*3), FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+    }
     
-    return CGSizeMake(result.width + (PADDING*3), result.height + (PADDING*2.5));
+    CGSize result = CGSizeZero;
+    if (self.bubbleText.length > 0) {
+        result = [self.bubbleText sizeWithFont:self.font constrainedToSize:CGSizeMake(window.size.width - widthDelta - (PADDING*3), FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+    }
+    
+    return CGSizeMake(MAX(titleResult.width, result.width) + (PADDING*3), titleResult.height + result.height + (PADDING*2.5));
 }
 
 -(CGSize)offsets
@@ -204,7 +258,7 @@
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
     
-    CGSize size = [self sizeWithFont:[self font]];
+    CGSize size = [self calculateSize];
     
     CGPathRef clippath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake([self offsets].width,[self offsets].height, size.width, size.height) cornerRadius:RADIUS].CGPath;
     CGContextAddPath(ctx, clippath);

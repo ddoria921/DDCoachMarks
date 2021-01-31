@@ -42,7 +42,7 @@ Create a new DDCoachMarksView instance and pass in an array of coach mark defini
                                 @"shape": @"circle",
                                 },
                             @{
-                                @"rect": [NSValue valueWithCGRect:CGRectMake(0, 125, 320, 60)],
+                                @"attachedview": self.viewToHighlight,
                                 @"caption": @"Swipe for more options",
                                 @"shape": @"square",
                                 @"swipe": @"YES",
@@ -74,6 +74,7 @@ You can configure any coach mark properties before calling the `start` method. F
 coachMarksView.animationDuration = 0.5f;
 coachMarksView.maskColor = [UIColor blueColor];
 coachMarksView.useBubbles = NO;
+coachMarksView.transmitTouchesInCutout = NO;	// Don't allow the user to interact with the element being showcased (default)
 [coachMarksView start];
 ```
 
@@ -81,17 +82,25 @@ coachMarksView.useBubbles = NO;
 When creating your array of dictionary definitions for each coach mark only the `@"rect"` value is required. 
 Other optional values are:
 * `@"caption"` 
-Text that goes in the bubbles
+ Text that goes in the bubbles
+* `@"title"`
+ An optional title to go above the caption
 * `@"shape"`
  Can be set to circle or square. If nothing is defined, the default is a rounded rect.
 * `@"POI"`
  Stands for 'point of interest'. You can define a whole region using the `@"rect"` value, but defining a different CGRect value here makes the bubble caption position itself under the POI rect.
+* `@"attachedview"`
+ Specify a specific UIView to highlight instead of a manually specified `@"rect"` or `@"POI"`.
+* `@"transform"`
+ Specify an optional CGAffineTransform that will be applied to the `@"rect"`, `@"POI"` or `@"attachedview"` frame. Especially useful if you want to modify the frame of the `@"attachedview"` in any way before highlighting.
 * `@"swipe"`
  Use "YES" here if you want to show a row swipe gesture on a table view cell. Disabled by default.
 * `@"direction"`
  Direction that swipe gestures should animate in. The default is `@"lefttoright"` but you can also specify `@"righttoleft"`.
 * `@"font"`
- Font for the caption in the bubble. If not specified, defaults to the default HelveticaNeue size 14.0.
+ Font for the caption in the bubble. If not specified, defaults to the system font size 14.0.
+* `@"titlefont"`
+ Font for the title caption in the bubble. If not specified, defaults to the bold system font size 14.0.
 
 ## DDCoachMarksViewDelegate
 
