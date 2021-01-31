@@ -15,6 +15,10 @@ static const CGFloat    kAnimationDuration = 0.3f;
 static const CGFloat    kCutoutRadius = 2.0f;
 static const CGFloat    kMaxLblWidth = 230.0f;
 static const CGFloat    kLblSpacing = 35.0f;
+static const CGFloat    kLblFontSize = 16.0f;
+static const BOOL kEnableContinueLabel = NO;
+static const BOOL kEnableSkipButton = NO;
+static const BOOL kEnableTapAction = YES;
 
 @interface DDCoachMarksView ()
 @property (nonatomic, strong) DDCircleView  *animatingCircle;
@@ -25,6 +29,8 @@ static const CGFloat    kLblSpacing = 35.0f;
     CAShapeLayer    *mask;
     NSUInteger      markIndex;
     UILabel         *lblContinue;
+    UIButton        *btnSkipCoach;
+
 }
 
 #pragma mark - Methods
@@ -65,6 +71,10 @@ static const CGFloat    kLblSpacing = 35.0f;
     self.cutoutRadius = kCutoutRadius;
     self.maxLblWidth = kMaxLblWidth;
     self.lblSpacing = kLblSpacing;
+    self.LblFontSize = kLblFontSize;
+    self.enableContinueLabel = kEnableContinueLabel;
+    self.enableSkipButton = kEnableSkipButton;
+    self.enableTapAction = kEnableTapAction;
     self.useBubbles = YES;
 
     // Shape layer mask
@@ -147,8 +157,14 @@ static const CGFloat    kLblSpacing = 35.0f;
         [self.delegate didTapAtIndex:markIndex];
     }
     
-    // Go to the next coach mark
-    [self goToCoachMarkIndexed:(markIndex+1)];
+    if (self.enableTapAction == YES) {
+        // Go to the next coach mark
+        [self goToCoachMarkIndexed:(markIndex+1)];
+    }
+    else{
+        // Nothing
+    }
+
 }
 
 #pragma mark - Navigation
@@ -165,6 +181,23 @@ static const CGFloat    kLblSpacing = 35.0f;
                          // Go to the first coach mark
                          [self goToCoachMarkIndexed:0];
                      }];
+}
+- (void)stop {
+    // Fade in self
+    self.alpha = 1.0f;
+    [UIView animateWithDuration:self.animationDuration
+                     animations:^{
+                         self.alpha = 0.0f;
+                     }
+                     completion:^(BOOL finished) {
+                         // Go to the first coach mark
+                         self.hidden = YES;
+                         [self goToCoachMarkIndexed:0];
+                     }];
+}
+
+- (void)skipCoach {
+    [self goToCoachMarkIndexed:self.coachMarks.count];
 }
 
 - (void)goToCoachMarkIndexed:(NSUInteger)index {
@@ -203,6 +236,42 @@ static const CGFloat    kLblSpacing = 35.0f;
     
     // Animate swipe gesture
     [self showSwipeGesture];
+    
+    CGFloat lblContinueWidth = self.enableSkipButton ? (70.0/100.0) * self.bounds.size.width : self.bounds.size.width;
+    CGFloat btnSkipWidth = self.bounds.size.width - lblContinueWidth;
+    
+    // Show continue lbl if first mark
+    if (self.enableContinueLabel) {
+        if (markIndex == 0) {
+            lblContinue = [[UILabel alloc] initWithFrame:(CGRect){{0, self.bounds.size.height - 30.0f}, {lblContinueWidth, 30.0f}}];
+            lblContinue.font = [UIFont boldSystemFontOfSize:self.LblFontSize];
+            lblContinue.textAlignment = NSTextAlignmentCenter;
+            lblContinue.text = @"Tap to continue";
+            lblContinue.alpha = 0.0f;
+            lblContinue.backgroundColor = [UIColor whiteColor];
+            [self addSubview:lblContinue];
+            [UIView animateWithDuration:0.3f delay:1.0f options:0 animations:^{
+                lblContinue.alpha = 1.0f;
+            } completion:nil];
+        } else if (markIndex > 0 && lblContinue != nil) {
+            // Otherwise, remove the lbl
+            [lblContinue removeFromSuperview];
+            lblContinue = nil;
+        }
+    }
+    
+    if (self.enableSkipButton) {
+        btnSkipCoach = [[UIButton alloc] initWithFrame:(CGRect){{lblContinueWidth, self.bounds.size.height - 30.0f}, {btnSkipWidth, 30.0f}}];
+        [btnSkipCoach addTarget:self action:@selector(skipCoach) forControlEvents:UIControlEventTouchUpInside];
+        [btnSkipCoach setTitle:@"Skip" forState:UIControlStateNormal];
+        btnSkipCoach.titleLabel.font = [UIFont boldSystemFontOfSize:self.LblFontSize];
+        btnSkipCoach.alpha = 0.0f;
+        btnSkipCoach.tintColor = [UIColor whiteColor];
+        [self addSubview:btnSkipCoach];
+        [UIView animateWithDuration:0.3f delay:1.0f options:0 animations:^{
+            btnSkipCoach.alpha = 1.0f;
+        } completion:nil];
+    }
 }
 
 #pragma mark - Swipe Animation
